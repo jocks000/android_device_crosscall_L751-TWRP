@@ -1,5 +1,8 @@
 name: Build TWRP L751
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -30,7 +33,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: twrp_device_tree
-       - name: Build Recovery
+      - name: Build Recovery
         run: |
           mkdir -p /mnt/twrp/device/crosscall/L751
           cp -r twrp_device_tree/* /mnt/twrp/device/crosscall/L751/
