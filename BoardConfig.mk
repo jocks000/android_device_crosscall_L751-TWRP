@@ -76,12 +76,12 @@ TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
-# Security patch level (aligné sur le stock L751)
+# Security patch level
 PLATFORM_SECURITY_PATCH := 2021-08-01
 VENDOR_SECURITY_PATCH := 2021-08-01
 PLATFORM_VERSION := 11
 
-# Verified Boot (AVB footer pour recovery)
+# Verified Boot
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
