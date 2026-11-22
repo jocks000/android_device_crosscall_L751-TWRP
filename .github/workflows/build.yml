@@ -13,13 +13,17 @@ jobs:
           remove-android: 'true'
           remove-haskell: 'true'
           remove-codeql: 'true'
+          remove-swift: 'true'
+          remove-boost: 'true'
       - name: Install Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5 libncurses5-dev libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev python3 repo
+      - name: Prepare Mnt Directory
+        run: sudo mkdir -p /mnt/twrp && sudo chown -R ${{github.actor}}:${{github.actor}} /mnt/twrp
       - name: Sync TWRP 12.1
         run: |
-          mkdir -p ~/twrp && cd ~/twrp
+          cd /mnt/twrp
           git config --global user.name "builder"
           git config --global user.email "builder@localhost"
           repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
@@ -27,10 +31,12 @@ jobs:
       - name: Copy Device Tree
         uses: actions/checkout@v4
         with:
-          path: twrp/device/crosscall/L751
+          path: twrp_device_tree
       - name: Build Recovery
         run: |
-          cd ~/twrp
+          mkdir -p /mnt/twrp/device/crosscall/L751
+          cp -r twrp_device_tree/* /mnt/twrp/device/crosscall/L751/
+          cd /mnt/twrp
           source build/envsetup.sh
           export ALLOW_MISSING_DEPENDENCIES=true
           lunch twrp_L751-eng
@@ -39,4 +45,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: TWRP-L751
-          path: ~/twrp/out/target/product/L751/recovery.img
+          path: /mnt/twrp/out/target/product/L751/recovery.img
